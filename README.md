@@ -6,6 +6,35 @@ This repository contains my solution for the Backend Developer Task as part of t
 
 The task involves creating an Image Upload and GET Endpoint using Typescript. The primary requirements include processing image uploads, saving images to a MongoDB database, implementing validation checks, constructing client responses, and ensuring proper error handling.
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js installed
+- MongoDB installed (and running)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/tobams-backend-task.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd tobams-backend-task
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Set up your MongoDB database and update the connection string in `src/utils/database.ts`.
+
 ## Endpoints
 
 ### Upload Image
