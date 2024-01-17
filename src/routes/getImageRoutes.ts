@@ -1,8 +1,9 @@
-import express from 'express';
-import getImageController from '../controllers/getImageController';
+import { Router } from 'express';
+import { getImageById ,getAllImages} from '../controllers/getImageController';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', getImageController.getImage);
+router.get('/', getAllImages);
+router.get('/:id', getImageById);
 
 export default router;

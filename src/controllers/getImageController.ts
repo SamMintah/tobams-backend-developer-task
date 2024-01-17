@@ -2,27 +2,69 @@ import { Request, Response } from 'express';
 import Image from '../models/ImageModel';
 
 /**
- * Retrieves an image from the database and sends it as a response.
+ * Retrieves an image by its ID and sends it as a response.
  *
  * @param {Request} req - The request object.
  * @param {Response} res - The response object.
- * @return {Promise<void>} - A promise that resolves once the image is sent or an error occurs.
+ * @return {Promise<Response<any, Record<string, any>>>} The HTTP response with the image data.
  */
-const getImage = async (req: Request, res: Response): Promise<void> => {
+export const getImageById = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>> | undefined> => {
   try {
-    const image = await Image.findOne();
+    const imageId = req.params.id;
+    const image = await Image.findById(imageId);
 
     if (!image) {
-      res.status(404).json({ message: 'No image found.' });
-      return;
+      return res.status(404).json({ message: 'Image not found.' });
     }
-    console.log(image)
-    
-    res.status(200).json({ imageUrl: `/get_image/${image._id}` });
+
+    const base64Image = image.data.toString('base64');
+    const dataUrl = `data:${image.contentType};base64,${base64Image}`;
+
+    res
+      .setHeader('Content-Type', image.contentType)
+      .status(200)
+      .json({ message: 'Image retrieved successfully.', imageUrl: dataUrl });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error.' });
   }
 };
 
-export default { getImage };
+/**
+ * Retrieves all images and sends image metadata as a response.
+ *
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @return {Promise<Response<any, Record<string, any>>>} The HTTP response with the images data.
+ */
+export const getAllImages = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>> | undefined> => {
+  try {
+    const images = await Image.find();
+
+    if (!images || images.length === 0) {
+      return res.status(404).json({ message: 'No images found.' });
+    }
+
+    // Extract image metadata from the retrieved images
+    const imageMetadata = images.map((image) => ({
+      id: image._id,
+      imageUrl: `/get_image/${image._id}`,
+      contentType: image.contentType
+    }));
+
+    res.status(200).json({
+      success: true,
+      message: 'Images retrieved successfully.',
+      images: imageMetadata
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error.' });
+  }
+};
