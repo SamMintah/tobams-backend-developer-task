@@ -17,7 +17,6 @@ const connectToDatabase = async (): Promise<boolean> => {
 
     const options = { autoIndex: true, family: 4, maxPoolSize: 10 };
     await mongoose.connect(process.env.MONGODB_URI, options);
-
     console.log('Database connected');
     return true;
   } catch (error: any) {

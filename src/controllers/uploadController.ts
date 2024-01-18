@@ -1,15 +1,7 @@
+import fs from 'fs';
 import { Request, Response } from 'express';
 import Image from '../models/ImageModel';
 import { isValidImage } from '../utils/validationUtils';
-import fs from 'fs';
-
-/**
- * Uploads an image file to the server.
- *
- * @param {Request} req - The request object.
- * @param {Response} res - The response object.
- * @return {Promise<void>} - A promise that resolves when the image is uploaded successfully.
- */
 
 export const uploadImage = async (
   req: Request,
@@ -26,20 +18,19 @@ export const uploadImage = async (
       return;
     }
 
-    // Read the image data from the file in the 'uploads' folder
-    const imageData = fs.readFileSync(req.file.path);
-
-    // Create a new instance of the Image model
+    const filename = Date.now() + req.file.originalname;
+    fs.renameSync(req.file.path, `uploads/${filename}`);
     const newImage = new Image({
-      data: imageData,
+      filename: filename,
       contentType: req.file.mimetype
     });
-
-    // Save the image to MongoDB
     await newImage.save();
-    res.status(200).json({ message: 'Image uploaded successfully.' });
+    const imageUrl = `/get_image/${newImage._id}`;
+    res
+      .status(200)
+      .json({ message: 'Image uploaded successfully.', imageUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error.' });
+    res.status(500).send('Internal Server Error.');
   }
 };

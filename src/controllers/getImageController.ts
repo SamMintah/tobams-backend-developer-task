@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import path from 'path';
 import Image from '../models/ImageModel';
 
 /**
@@ -17,16 +18,14 @@ export const getImageById = async (
     const image = await Image.findById(imageId);
 
     if (!image) {
-      return res.status(404).json({ message: 'Image not found.' });
+      return res.status(404).send('Image not found.');
     }
 
-    const base64Image = image.data.toString('base64');
-    const dataUrl = `data:${image.contentType};base64,${base64Image}`;
-
-    res
-      .setHeader('Content-Type', image.contentType)
-      .status(200)
-      .json({ message: 'Image retrieved successfully.', imageUrl: dataUrl });
+    const filePath = path.join('uploads', image.filename);
+    res.status(200).json({
+      message: 'Image retrieved successfully.',
+      imageUrl: filePath
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error.' });
@@ -48,16 +47,15 @@ export const getAllImages = async (
     const images = await Image.find();
 
     if (!images || images.length === 0) {
-      return res.status(404).json({ message: 'No images found.' });
+      return res.status(404).send('No images found.');
     }
 
-    // Extract image metadata from the retrieved images
     const imageMetadata = images.map((image) => ({
       id: image._id,
       imageUrl: `/get_image/${image._id}`,
-      contentType: image.contentType
+      contentType: path.extname(image.filename).slice(1)
     }));
-
+    
     res.status(200).json({
       success: true,
       message: 'Images retrieved successfully.',

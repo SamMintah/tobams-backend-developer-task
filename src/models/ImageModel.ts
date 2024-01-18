@@ -1,13 +1,18 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IImage extends Document {
-  data: Buffer;
-  contentType: string;
+  filename: string;
+  contentType: String;
 }
 
-const ImageSchema: Schema = new Schema({
-  data: Buffer,
-  contentType: String,
-});
+const ImageSchema: Schema = new Schema(
+  {
+    filename: String,
+    contentType: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export default mongoose.model<IImage>('Image', ImageSchema);
