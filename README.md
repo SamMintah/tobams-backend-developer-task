@@ -61,4 +61,62 @@ MONGODB_URI=mongodb://localhost:27017/yourdatabase
   - The image file with the appropriate content type.
   - `404 Not Found` - Image not found.
   - `500 Internal Server Error` - Server error.
+ ```json
+{
+    "message": "Image retrieved successfully.",
+    "imageUrl": "uploads/1705541010540pexels-stephan-seeber-1110504.jpg"
+}
+```
+ - `404 Not Found` - Image not found.
 
+    ```json
+    {
+      "message": "Image not found."
+    }
+    ```
+  - `500 Internal Server Error` - Server error.
+    ```json
+    {
+      "message": "Internal Server Error."
+    }
+    ```
+
+### Get All Images
+
+- **Endpoint:** `GET /get_image`
+- **Response:**
+  - `200 OK` - Images retrieved successfully.
+  - The image file with the appropriate content type.
+  - `404 Not Found` - Image not found.
+  - `500 Internal Server Error` - Server error.
+    ```json
+    {
+      "success": true,
+      "message": "Images retrieved successfully.",
+      "images": [
+        {
+          "id": "65a873bc9776bfb220a5f59e",
+          "imageUrl": "/get_image/65a873bc9776bfb220a5f59e",
+          "contentType": "png"
+        },
+        {
+          "id": "65a879a88320506ddfd3c553",
+          "imageUrl": "/get_image/65a879a88320506ddfd3c553",
+          "contentType": "jpg"
+        }
+      ]
+    }
+    ```
+  - `404 Not Found` - No images found.
+    ```json
+    {
+      
+      "message": "No images found."
+    }
+    ```
+  - `500 Internal Server Error` - Server error.
+    ```json
+    {
+      "message": "Internal Server Error."
+    }
+    ```
