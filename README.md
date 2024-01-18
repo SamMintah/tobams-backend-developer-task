@@ -18,7 +18,7 @@ The task involves creating an Image Upload and GET Endpoint using Typescript. Th
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/tobams-backend-task.git
+   git clone https://github.com/SamMintah/tobams-backend-developer-task.git
    ```
 
 2. Navigate to the project directory:
@@ -34,6 +34,13 @@ The task involves creating an Image Upload and GET Endpoint using Typescript. Th
    ```
 
 4. Set up your MongoDB database and update the connection string in `src/utils/database.ts`.
+
+### Environment Variables
+
+```bash
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/yourdatabase
+```
 
 ## Endpoints
 
